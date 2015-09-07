@@ -1,0 +1,157 @@
+<openerp>
+    <data>
+        <record id="view_mage2odoo_cartquote_form" model="ir.ui.view">
+            <field name="name">Cart2Quote Quote Form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="arch" type="xml">
+                <button name="invoice_recreate" position="before" >
+                    <button name="convert_odoo_to_mage_quote" type="object" string="Sync Quote" />
+		    <button name="send_quote_proposal" type="object" string="Send Proposal" />
+                </button>
+            </field>
+        </record>
+
+        <record id="view_cart_quote_salesperson_form" model="ir.ui.view">
+            <field name="name">C2Q Salesperson Form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="mage2odoo.view_mage_sale_stock_form"/>
+            <field name="arch" type="xml">
+                <field name="user_id" position="replace" />
+                <field name="mage_store" position="after" >
+                    <field name="user_id" />
+                </field>
+            </field>
+        </record>
+
+        <record id="view_cart_quote_phone_form" model="ir.ui.view">
+            <field name="name">C2Q Phone Form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="mage2odoo.view_mage_order_form" />
+            <field name="arch" type="xml">
+                <field name="order_email" position="after">
+                    <field name="related_phone" />
+		    <field name="quote_status" />
+                </field>
+            </field>
+        </record>
+
+        <record id="view_mage_cart_quote_sale_form" model="ir.ui.view">
+            <field name="name">Mage Cart2Quote Sale Form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="mage2odoo.view_mage_sale_stock_form"/>
+            <field name="arch" type="xml">
+                <field name="ip_address" position="after">
+			<field name="mage_quote_id" />
+                </field>
+            </field>
+        </record>
+
+        <record id="my_action_quotations" model="ir.actions.act_window">
+            <field name="name">My Quotes</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="sale.view_quotation_tree"/>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="context">{'search_default_my_sale_orders_filter': 1}</field>
+            <field name="domain">[('state','in',('quote', 'draft','sent','cancel'))]</field>
+            <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a quotation, the first step of a new sale.
+              </p><p>
+                Odoo will help you handle efficiently the complete sale flow:
+                from the quotation to the sales order, the
+                delivery, the invoicing and the payment collection.
+              </p><p>
+                The social feature helps you organize discussions on each sales
+                order, and allow your customers to keep track of the evolution
+                of the sales order.
+              </p>
+            </field>
+        </record>
+
+        <record id="my_action_orders" model="ir.actions.act_window">
+            <field name="name">My Sales Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+            <field name="context">{
+                    'search_default_my_sale_orders_filter': 1
+                }
+            </field>
+            <field name="domain">[('state', 'not in', ('quote', 'draft', 'sent', 'cancel'))]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a quotation that can be converted into a sales
+                    order.
+                </p><p>
+                    Odoo will help you efficiently handle the complete sales flow:
+                    quotation, sales order, delivery, invoicing and payment.
+                </p>
+            </field>
+        </record>
+
+        <record id="sale.action_quotations" model="ir.actions.act_window">
+            <field name="name">Quotes</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="sale.view_quotation_tree"/>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="domain">[('state','in',('quote', 'draft','sent','cancel'))]</field>
+            <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a quotation, the first step of a new sale.
+              </p><p>
+                Odoo will help you handle efficiently the complete sale flow:
+                from the quotation to the sales order, the
+                delivery, the invoicing and the payment collection.
+              </p><p>
+                The social feature helps you organize discussions on each sales
+                order, and allow your customers to keep track of the evolution
+                of the sales order.
+              </p>
+            </field>
+        </record>
+
+        <record id="sale.action_orders" model="ir.actions.act_window">
+            <field name="name">Sales Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+            <field name="domain">[('state', 'not in', ('quote', 'draft', 'sent', 'cancel'))]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a quotation that can be converted into a sales
+                    order.
+                </p><p>
+                    Odoo will help you efficiently handle the complete sales flow:
+                    quotation, sales order, delivery, invoicing and payment.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_my_sale_quotations"
+                action="my_action_quotations" parent="base.menu_sales"
+                sequence="5"/>
+
+        <menuitem id="menu_my_sale_orders"
+                action="my_action_orders" parent="base.menu_sales"
+                sequence="5"/>
+
+        <menuitem id="sale.menu_sale_quotations"
+                action="sale.action_quotations" parent="base.menu_sales"
+                sequence="6"/>
+
+        <menuitem id="sale.menu_sale_order"
+                action="sale.action_orders" parent="base.menu_sales"
+                sequence="7"/>
+    </data>
+</openerp>

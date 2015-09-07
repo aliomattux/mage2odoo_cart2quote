@@ -1,0 +1,31 @@
+<openerp>
+    <data>
+        <record model="ir.actions.act_window" id="mage_partner_quotes">
+            <field name="name">Quotes</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="sale.view_quotation_tree"/>
+	    <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+        </record>
+
+        <!--  Partners inherited form -->
+        <record id="view_partner_quotes" model="ir.ui.view">
+            <field name="name">View Partner Quotes</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="groups_id" eval="[(4, ref('base.group_sale_salesman')), (4, ref('base.group_partner_manager'))]"/>
+            <field name="priority" eval="50"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='buttons']" position="inside">
+                    <button class="oe_inline oe_stat_button" type="action" 
+                        context="{'search_default_partner_id': active_id, 'default_partner_id': active_id}"
+                        name="%(mage_partner_quotes)d" icon="fa-comments">
+                        <field string="Quotes" name="sale_quote_count" widget="statinfo"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>
