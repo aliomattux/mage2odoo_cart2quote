@@ -58,6 +58,8 @@ class SaleOrder(osv.osv):
         credentials = integrator_obj.get_external_credentials(cr, uid)
 
 	sale = self.browse(cr, uid, ids[0])
+	if not sale.mage_quote_id or sale.mage_quote_id == 0:
+	    raise osv.except_osv(_('User Error!'),_('You must push the quote to Magento before you can send it to the customer!'))
 	try:
 	    with API(credentials['url'], credentials['username'], credentials['password']) as quote_api:
 	        quote_api.call('c2q_quotation.send_proposal', [sale.mage_quote_id])
